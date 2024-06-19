@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="dtm_tubos_realizados_tree" model="ir.ui.view">
+        <field name="name">dtm_tubos_realizados_tree</field>
+        <field name="model">dtm.tubos.realizados</field>
+        <field name="arch" type="xml">
+            <tree >
+                <field name="orden_trabajo" />
+                <field name="fecha_entrada"  />
+                <field name="nombre_orden"  />
+                <field name="cortadora_id"  />
+                <field name="tipo_orden" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="dtm_tubos_realizados_view_form" model="ir.ui.view">
+        <field name="name">dtm_tubos_realizados_form</field>
+        <field name="model">dtm.tubos.realizados</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="orden_trabajo" />
+                        <field name="tipo_orden" />
+                        <field name="fecha_entrada"  />
+                        <field name="nombre_orden"  />
+                    </group>
+                        <notebook>
+                            <page string="Archivos">
+                                <field name="cortadora_id">
+                                    <tree>
+                                        <field name="nombre"/>
+                                    </tree>
+                                    <form >
+                                        <field name="documentos" filename="nombre" widget="pdf_viewer"></field>
+                                        <field name="nombre" invisible="1"></field>
+                                    </form>
+                                </field>
+                            </page>
+                             <page string="Materiales">
+                                <field name="materiales_id">
+                                    <tree>
+                                        <field name="identificador"/>
+                                        <field name="nombre"/>
+                                        <field name="medida" />
+                                        <field name="cantidad" />
+                                        <field name="inventario"/>
+                                        <field name="requerido" />
+                                        <field name="localizacion" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="dtm_tubos_realizados_accion" model="ir.actions.act_window">
+        <field name="name">Realizados</field>
+        <field name="res_model">dtm.tubos.realizados</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="dtm_tubos_realizados"  action="dtm_tubos_realizados_accion"/>
+
+</odoo>

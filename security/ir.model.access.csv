@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_dtm_tubos_corte,access.dtm.tubos.corte,model_dtm_tubos_corte,base.group_user,1,1,1,1
+access_dtm_tubos_documentos,access.dtm.tubos.documentos,model_dtm_tubos_documentos,base.group_user,1,1,1,1
+access_dtm_tubos_materiales,access.dtm.tubos.materiales,model_dtm_tubos_materiales,base.group_user,1,1,1,1
+access_dtm_tubos_realizados,access.dtm.tubos.realizados,model_dtm_tubos_realizados,base.group_user,1,1,1,1
