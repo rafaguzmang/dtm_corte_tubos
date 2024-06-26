@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-     <menuitem name="LTP 6032" id="menu_root_dtm_corte_tubos">
-        <menuitem id="dtm_tubos_corte" parent="" action="dtm_tubos_corte_accion"/>
-        <menuitem id="dtm_tubos_realizados"  action="dtm_tubos_realizados_accion"/>
-     </menuitem>
-</odoo>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<odoo>-->
+<!--     <menuitem name="LTP 6032" id="menu_root_dtm_corte_tubos">-->
+<!--        <menuitem id="dtm_tubos_corte" parent="" action="dtm_tubos_corte_accion"/>-->
+<!--        <menuitem id="dtm_tubos_realizados"  action="dtm_tubos_realizados_accion"/>-->
+<!--     </menuitem>-->
+<!--</odoo>-->
