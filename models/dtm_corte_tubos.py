@@ -105,7 +105,9 @@ class Documentos(models.Model):
                 for n_archivo in main.cortadora_id:
                     if self.nombre == n_archivo.nombre:
                         get_otd = self.env['dtm.odt'].search([("ot_number","=",main.orden_trabajo)]) # Actualiza el status en los modelos odt y proceso a corte
-                        get_otp = self.env['dtm.proceso'].search([("ot_number","=",main.orden_trabajo),("tipe_order","=","OT")])
+                        get_otp = self.env['dtm.proceso'].search([("ot_number","=",main.orden_trabajo),("tipe_order","=",main.tipo_orden)])
+                        if main.tipo_orden == "NPI":
+                            get_otd = self.env['dtm.npi'].search([("ot_number","=",main.orden_trabajo)]) # Actualiza el status en los modelos odt y proceso a corte
                         for documento in get_otp.tubos_id:
                             if documento.nombre == self.nombre:
                                 get_self = self.env['dtm.tubos.documentos'].search([("id","=",self._origin.id)])

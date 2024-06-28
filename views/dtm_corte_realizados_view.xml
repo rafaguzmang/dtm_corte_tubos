@@ -63,6 +63,6 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="dtm_tubos_realizados"  action="dtm_tubos_realizados_accion"/>
+<!--    <menuitem id="dtm_tubos_realizados"  action="dtm_tubos_realizados_accion"/>-->
 
 </odoo>

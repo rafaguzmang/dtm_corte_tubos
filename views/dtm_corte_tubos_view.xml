@@ -71,6 +71,6 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="dtm_tubos_corte" parent="" action="dtm_tubos_corte_accion"/>
+<!--    <menuitem id="dtm_tubos_corte" parent="" action="dtm_tubos_corte_accion"/>-->
 
 </odoo>
