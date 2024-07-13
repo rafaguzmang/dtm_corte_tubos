@@ -16,19 +16,11 @@ class Cortadora(models.Model):
     materiales_id = fields.Many2many("dtm.tubos.materiales", string="Materiales", readonly=True)
 
     def action_finalizar(self):
-        get_otp = self.env['dtm.proceso'].search([("ot_number","=",self.orden_trabajo),("tipe_order","=","OT")])
-        get_otd = self.env['dtm.odt'].search([("ot_number","=",self.orden_trabajo)]) # Actualiza el status en los modelos odt y proceso a corte
         cont = 0;
         for corte in self.cortadora_id:
             if corte.estado != "Material cortado":
               break
             cont +=1
-        if cont == 0:
-             get_otd.write({"status":"Corte"})
-             get_otp.write({"status":"corte"})
-        else:
-            get_otd.write({"status":"Corte - Doblado"})
-            get_otp.write({"status":"cortedoblado"})
         if len(self.cortadora_id) == cont:
             vals = {
                 "orden_trabajo": self.orden_trabajo,
