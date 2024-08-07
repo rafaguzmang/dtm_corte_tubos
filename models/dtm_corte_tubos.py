@@ -29,8 +29,6 @@ class Cortadora(models.Model):
             }
             get_info = self.env['dtm.tubos.realizados'].search([])
             get_info.create(vals)
-            get_otd = self.env['dtm.odt'].search([("ot_number","=",self.orden_trabajo)]) # Actualiza el status en los modelos odt y proceso a corte
-            get_otd.write({"status":"Doblado"})
             get_otp = self.env['dtm.proceso'].search([("ot_number","=",self.orden_trabajo),("tipe_order","=","OT")])
             get_otp.write({
                 "status":"doblado"
@@ -38,7 +36,7 @@ class Cortadora(models.Model):
             get_info =  self.env['dtm.tubos.realizados'].search([("orden_trabajo","=", self.orden_trabajo)])
             lines = []
             for docs in self.cortadora_id:
-                line = (0,get_info.id,{
+                line = (0,get_info[0].id,{
                     "nombre": docs.nombre,
                     "documentos":docs.documentos,
                 })
@@ -96,10 +94,7 @@ class Documentos(models.Model):
             for main in get_laser:
                 for n_archivo in main.cortadora_id:
                     if self.nombre == n_archivo.nombre:
-                        get_otd = self.env['dtm.odt'].search([("ot_number","=",main.orden_trabajo)]) # Actualiza el status en los modelos odt y proceso a corte
                         get_otp = self.env['dtm.proceso'].search([("ot_number","=",main.orden_trabajo),("tipe_order","=",main.tipo_orden)])
-                        if main.tipo_orden == "NPI":
-                            get_otd = self.env['dtm.npi'].search([("ot_number","=",main.orden_trabajo)]) # Actualiza el status en los modelos odt y proceso a corte
                         for documento in get_otp.tubos_id:
                             if documento.nombre == self.nombre:
                                 get_self = self.env['dtm.tubos.documentos'].search([("id","=",self._origin.id)])
@@ -109,8 +104,7 @@ class Documentos(models.Model):
                                     })
                                     self.estado = "Material cortado"
                                     documento.cortado = "Material cortado"
-                                    get_otd.write({"status":"Corte - Doblado"})
-                                    get_otp.write({"status":"cortedoblado"})
+                                    get_otp.write({"status":"doblado"})
                                 else:
                                     get_self.write({
                                         "estado": ""
