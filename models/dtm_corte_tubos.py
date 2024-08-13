@@ -116,7 +116,7 @@ class Terminados(models.Model):
     _name = "dtm.tubos.materiales"
     _description = "Se guardan todos los cortes realizados"
 
-    identificador = fields.Integer(string="ID")
+    identificador = fields.Integer(string="Código")
     nombre = fields.Char(string="Materiales")
     medida = fields.Char(string="Medidas")
     cantidad = fields.Integer(string="Cantidad")

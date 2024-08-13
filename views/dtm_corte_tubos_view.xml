@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button type="object" name="action_finalizar" string="FINALIZAR ORDEN" icon="fa-print" class="btn btn-primary"/>
+                    <button type="object" name="action_finalizar" string="FINALIZAR ORDEN" icon="fa-print" title="print" class="btn btn-primary"/>
                 </header>
                 <sheet>
                     <group>
@@ -37,8 +37,8 @@
                                     <field name="contador"/>
                                     <field name="cortado"  widget="boolean_toggle"/>
                                     <field name="estado" />
-                                    <button type="object" name="action_menos" icon="fa-minus" class="btn btn-primary"/>
-                                    <button type="object" name="action_mas" icon="fa-plus" class="btn btn-primary"/>
+                                    <button type="object" name="action_menos" icon="fa-minus" title="menos" class="btn btn-primary"/>
+                                    <button type="object" name="action_mas" icon="fa-plus" title="mas" class="btn btn-primary"/>
                                 </tree>
                                 <form >
                                     <field name="documentos" filename="nombre" widget="pdf_viewer"></field>

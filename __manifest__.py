@@ -9,5 +9,6 @@
     'security/ir.model.access.csv',
     'views/dtm_corte_tubos_view.xml',
     'views/dtm_corte_realizados_view.xml',
-]
+],
+    'license': 'LGPL-3',
 }
