@@ -43,27 +43,27 @@ class Cortadora(models.Model):
                 lines.append(line)
             get_info.cortadora_id = lines
 
-            for material in self.materiales_id:
-                get_almacen = self.env['dtm.materiales.solera'].search([("codigo","=","0")])
-                if re.match("Solera",material.nombre):
-                    get_almacen = self.env['dtm.materiales.solera'].search([("codigo","=",material.identificador)])
-                elif re.match("Ángulo",material.nombre):
-                    get_almacen = self.env['dtm.materiales.angulos'].search([("codigo","=",material.identificador)])
-                elif re.match("Perfil",material.nombre):
-                    get_almacen = self.env['dtm.materiales.perfiles'].search([("codigo","=",material.identificador)])
-                elif re.match("Canal",material.nombre):
-                    get_almacen = self.env['dtm.materiales.canal'].search([("codigo","=",material.identificador)])
-                elif re.match("Tubo",material.nombre):
-                    get_almacen = self.env['dtm.materiales.tubos'].search([("codigo","=",material.identificador)])
-
-                cantidad = get_almacen.cantidad - material.cantidad
-                apartado = get_almacen.apartado - material.cantidad
-                vals = {
-                    "cantidad":cantidad,
-                    "apartado":apartado,
-                    "disponible":cantidad - apartado,
-                }
-                get_almacen.write(vals)
+            # for material in self.materiales_id:
+            #     get_almacen = self.env['dtm.materiales.solera'].search([("codigo","=","0")])
+            #     if re.match("Solera",material.nombre):
+            #         get_almacen = self.env['dtm.materiales.solera'].search([("codigo","=",material.identificador)])
+            #     elif re.match("Ángulo",material.nombre):
+            #         get_almacen = self.env['dtm.materiales.angulos'].search([("codigo","=",material.identificador)])
+            #     elif re.match("Perfil",material.nombre):
+            #         get_almacen = self.env['dtm.materiales.perfiles'].search([("codigo","=",material.identificador)])
+            #     elif re.match("Canal",material.nombre):
+            #         get_almacen = self.env['dtm.materiales.canal'].search([("codigo","=",material.identificador)])
+            #     elif re.match("Tubo",material.nombre):
+            #         get_almacen = self.env['dtm.materiales.tubos'].search([("codigo","=",material.identificador)])
+            #
+            #     cantidad = get_almacen.cantidad - material.cantidad
+            #     apartado = get_almacen.apartado - material.cantidad
+            #     vals = {
+            #         "cantidad":cantidad,
+            #         "apartado":apartado,
+            #         "disponible":cantidad - apartado,
+            #     }
+            #     get_almacen.write(vals)
             get_self = self.env['dtm.tubos.corte'].browse(self.id)
             get_self.unlink()
         else:
