@@ -122,7 +122,6 @@ class Terminados(models.Model):
     cantidad = fields.Integer(string="Cantidad")
     inventario = fields.Integer(string="Inventario")
     requerido = fields.Integer(string="Requerido (Compras)")
-    localizacion = fields.Char(string="Localización")
 
 class Realizado(models.Model):
     _name = "dtm.tubos.realizados"

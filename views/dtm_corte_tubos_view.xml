@@ -55,7 +55,6 @@
                                     <field name="cantidad" />
                                     <field name="inventario"/>
                                     <field name="requerido" />
-                                    <field name="localizacion" />
                                 </tree>
                             </field>
                         </page>
