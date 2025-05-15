@@ -13,6 +13,7 @@ class Cortadora(models.Model):
     nombre_orden = fields.Char(string="Nombre", readonly=True)
     cortadora_id = fields.Many2many("dtm.tubos.documentos", readonly=True)
     tipo_orden = fields.Char(string="Tipo", readonly=True)
+    revision_ot = fields.Integer(string="VERSIÓN",readonly=True) # Esto es versión
     materiales_id = fields.Many2many("dtm.tubos.materiales", string="Materiales", readonly=True)
 
     def action_finalizar(self):
