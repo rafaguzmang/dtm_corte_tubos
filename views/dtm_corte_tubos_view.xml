@@ -7,6 +7,7 @@
             <tree >
                 <field name="orden_trabajo" />
                 <field name="tipo_orden" />
+                <field name="revision_ot" />
                 <field name="fecha_entrada"  />
                 <field name="nombre_orden"  />
                 <field name="cortadora_id"  />
@@ -26,6 +27,7 @@
                     <group>
                         <field name="orden_trabajo" />
                         <field name="tipo_orden" />
+                        <field name="revision_ot" />
                         <field name="fecha_entrada"  />
                         <field name="nombre_orden"  />
                     </group>
