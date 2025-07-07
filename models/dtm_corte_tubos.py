@@ -7,6 +7,7 @@ import re
 class Cortadora(models.Model):
     _name = "dtm.tubos.corte"
     _description = "Modulo para llevar el proceso de la cortadora de tubos"
+    _rec_name = "orden_trabajo"
 
     orden_trabajo = fields.Integer(string="Orden de Trabajo", readonly=True)
     fecha_entrada = fields.Date(string="Fecha de entrada", readonly=True)
@@ -18,57 +19,34 @@ class Cortadora(models.Model):
 
     def action_finalizar(self):
         cont = 0;
-        for corte in self.cortadora_id:
-            if corte.estado != "Material cortado":
-              break
-            cont +=1
-        if len(self.cortadora_id) == cont:
+
+        cortes = self.cortadora_id.mapped('cortado')
+        if len(cortes) == 1 and False not in cortes:
             vals = {
-                "orden_trabajo": self.orden_trabajo,
-                "fecha_entrada": datetime.today(),
-                "nombre_orden": self.nombre_orden,
-            }
-            get_info = self.env['dtm.tubos.realizados'].search([])
-            get_info.create(vals)
-            get_otp = self.env['dtm.proceso'].search([("ot_number","=",self.orden_trabajo),("tipe_order","=","OT")])
+                    "orden_trabajo": self.orden_trabajo,
+                    "fecha_entrada": datetime.today(),
+                    "nombre_orden": self.nombre_orden,
+                    "revision_ot": self.revision_ot,
+                    "cortadora_id": self.cortadora_id.ids,
+                    "materiales_id": self.materiales_id.ids
+                }
+            self.env['dtm.tubos.realizados'].create(vals)
+            get_otp = self.env['dtm.proceso'].search([("ot_number","=",self.orden_trabajo),("revision_ot","=",self.revision_ot)])
             get_otp.write({
                 "status":"doblado"
             })
-            get_info =  self.env['dtm.tubos.realizados'].search([("orden_trabajo","=", self.orden_trabajo)])
-            lines = []
-            for docs in self.cortadora_id:
-                line = (0,get_info[0].id,{
-                    "nombre": docs.nombre,
-                    "documentos":docs.documentos,
-                })
-                lines.append(line)
-            get_info.cortadora_id = lines
-
-            # for material in self.materiales_id:
-            #     get_almacen = self.env['dtm.materiales.solera'].search([("codigo","=","0")])
-            #     if re.match("Solera",material.nombre):
-            #         get_almacen = self.env['dtm.materiales.solera'].search([("codigo","=",material.identificador)])
-            #     elif re.match("Ángulo",material.nombre):
-            #         get_almacen = self.env['dtm.materiales.angulos'].search([("codigo","=",material.identificador)])
-            #     elif re.match("Perfil",material.nombre):
-            #         get_almacen = self.env['dtm.materiales.perfiles'].search([("codigo","=",material.identificador)])
-            #     elif re.match("Canal",material.nombre):
-            #         get_almacen = self.env['dtm.materiales.canal'].search([("codigo","=",material.identificador)])
-            #     elif re.match("Tubo",material.nombre):
-            #         get_almacen = self.env['dtm.materiales.tubos'].search([("codigo","=",material.identificador)])
-            #
-            #     cantidad = get_almacen.cantidad - material.cantidad
-            #     apartado = get_almacen.apartado - material.cantidad
-            #     vals = {
-            #         "cantidad":cantidad,
-            #         "apartado":apartado,
-            #         "disponible":cantidad - apartado,
-            #     }
-            #     get_almacen.write(vals)
             get_self = self.env['dtm.tubos.corte'].browse(self.id)
             get_self.unlink()
         else:
              raise ValidationError("Todos los nesteos deben estar cortados")
+
+    def get_view(self, view_id=None, view_type='form', **options):
+        res = super(Cortadora, self).get_view(view_id, view_type, **options)
+
+        corte = self.env['dtm.tubos.corte'].search([('cortadora_id', '=', False)])
+        corte.unlink()
+
+        return res
 
 
 class Documentos(models.Model):
@@ -127,8 +105,10 @@ class Terminados(models.Model):
 class Realizado(models.Model):
     _name = "dtm.tubos.realizados"
     _description = "Modelo para lamacenar todas los cortes de tubos"
+    _rec_name = "orden_trabajo"
 
     orden_trabajo = fields.Integer(string="Orden de Trabajo", readonly=True)
+    revision_ot = fields.Integer(string="VERSIÓN",readonly=True) # Esto es versión
     fecha_entrada = fields.Date(string="Fecha de entrada", readonly=True)
     nombre_orden = fields.Char(string="Nombre", readonly=True)
     cortadora_id = fields.Many2many("dtm.tubos.documentos", readonly=True)
