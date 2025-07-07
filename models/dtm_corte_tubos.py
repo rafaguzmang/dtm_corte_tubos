@@ -18,10 +18,9 @@ class Cortadora(models.Model):
     materiales_id = fields.Many2many("dtm.tubos.materiales", string="Materiales", readonly=True)
 
     def action_finalizar(self):
-        cont = 0;
-
         cortes = self.cortadora_id.mapped('cortado')
-        if len(cortes) == 1 and False not in cortes:
+        print(cortes)
+        if len(set(cortes)) == 1 and False not in cortes:
             vals = {
                     "orden_trabajo": self.orden_trabajo,
                     "fecha_entrada": datetime.today(),
