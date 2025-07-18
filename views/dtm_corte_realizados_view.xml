@@ -32,6 +32,7 @@
                 <sheet>
                     <group>
                         <field name="orden_trabajo" />
+                        <field name="revision_ot" />
                         <field name="tipo_orden" />
                         <field name="fecha_entrada"  />
                         <field name="nombre_orden"  />

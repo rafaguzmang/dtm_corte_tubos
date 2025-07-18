@@ -12,24 +12,31 @@ class Cortadora(models.Model):
     orden_trabajo = fields.Integer(string="Orden de Trabajo", readonly=True)
     fecha_entrada = fields.Date(string="Fecha de entrada", readonly=True)
     nombre_orden = fields.Char(string="Nombre", readonly=True)
-    cortadora_id = fields.Many2many("dtm.tubos.documentos", readonly=True)
+    cortadora_id = fields.One2many("dtm.tubos.documentos",'model_id', readonly=True)
     tipo_orden = fields.Char(string="Tipo", readonly=True)
     revision_ot = fields.Integer(string="VERSIÓN",readonly=True) # Esto es versión
     materiales_id = fields.Many2many("dtm.tubos.materiales", string="Materiales", readonly=True)
 
     def action_finalizar(self):
         cortes = self.cortadora_id.mapped('cortado')
-        print(cortes)
         if len(set(cortes)) == 1 and False not in cortes:
             vals = {
                     "orden_trabajo": self.orden_trabajo,
                     "fecha_entrada": datetime.today(),
                     "nombre_orden": self.nombre_orden,
                     "revision_ot": self.revision_ot,
-                    "cortadora_id": self.cortadora_id.ids,
-                    "materiales_id": self.materiales_id.ids
+                    "materiales_id": self.materiales_id.ids,
+                    "tipo_orden":self.tipo_orden
+
                 }
             self.env['dtm.tubos.realizados'].create(vals)
+            get_cortado = self.env['dtm.tubos.realizados'].search([('orden_trabajo','=',self.orden_trabajo),('revision_ot','=',self.revision_ot),('tipo_orden','=',self.tipo_orden)],limit=1)
+            # print(get_cortado)
+            for archivo in self.cortadora_id:
+                # print(archivo)
+                archivo.write({'model_id':None,'model2_id':get_cortado.id})
+
+            # Actualiza el status en Procesos
             get_otp = self.env['dtm.proceso'].search([("ot_number","=",self.orden_trabajo),("revision_ot","=",self.revision_ot)])
             get_otp.write({
                 "status":"doblado"
@@ -43,7 +50,8 @@ class Cortadora(models.Model):
         res = super(Cortadora, self).get_view(view_id, view_type, **options)
 
         corte = self.env['dtm.tubos.corte'].search([('cortadora_id', '=', False)])
-        corte.unlink()
+        if corte:
+            corte.unlink()
 
         return res
 
@@ -51,6 +59,9 @@ class Cortadora(models.Model):
 class Documentos(models.Model):
     _name = "dtm.tubos.documentos"
     _description = "Se almacenan los archivos pdf con los cortes"
+
+    model_id = fields.Many2one('dtm.tubos.corte')
+    model2_id = fields.Many2one('dtm.tubos.realizados')
 
     documentos = fields.Binary()
     nombre = fields.Char(string="Nombre")
@@ -107,9 +118,9 @@ class Realizado(models.Model):
     _rec_name = "orden_trabajo"
 
     orden_trabajo = fields.Integer(string="Orden de Trabajo", readonly=True)
-    revision_ot = fields.Integer(string="VERSIÓN",readonly=True) # Esto es versión
+    revision_ot = fields.Integer(string="Versión",readonly=True) # Esto es versión
     fecha_entrada = fields.Date(string="Fecha de entrada", readonly=True)
     nombre_orden = fields.Char(string="Nombre", readonly=True)
-    cortadora_id = fields.Many2many("dtm.tubos.documentos", readonly=True)
+    cortadora_id = fields.One2many("dtm.tubos.documentos",'model2_id', readonly=True)
     tipo_orden = fields.Char(string="Tipo", readonly=True)
     materiales_id = fields.Many2many("dtm.tubos.materiales", string="Materiales", readonly=True)
